@@ -1,6 +1,13 @@
 # Changelog
 
-## Version 1.5.0 (19 June 2023)
+## Version 1.5.1 
+
+#### Bug fixes
+
+- Add support to ready HDF5 files created with very old versions of Carpet (<
+  2012).
+
+## Version 1.5.0 (19 June 2024)
 
 #### General
 - Python 3.12 is now supported, Python 3.8.1 is required for development.

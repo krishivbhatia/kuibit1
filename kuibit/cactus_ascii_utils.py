@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # Inspired by code originally developed by Wolfgang Kastaun. This file may
 # contain algorithms and/or structures first implemented in
@@ -40,9 +40,9 @@ The functions available are:
 
 """
 
-from collections.abc import Iterable
 import os
 import re
+from collections.abc import Iterable
 
 
 def _scan_strings_for_columns(strings, pattern, path=None):

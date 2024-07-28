@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -169,8 +169,7 @@ class TestGWUtils(unittest.TestCase):
         freqs = strain_plus_fft.f
         vals = (
             strain_plus_fft.f
-            * (0.5 * (strain_plus_fft.amp**2 + strain_cross_fft.amp**2))
-            ** 0.5
+            * (0.5 * (strain_plus_fft.amp**2 + strain_cross_fft.amp**2)) ** 0.5
         )
 
         expected_heff = FrequencySeries(freqs, vals)

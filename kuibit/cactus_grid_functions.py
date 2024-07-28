@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # Inspired by code originally developed by Wolfgang Kastaun. This file may
 # contain algorithms and/or structures first implemented in
@@ -806,9 +806,9 @@ class OneGridFunctionASCII(BaseOneGridFunction):
 
                     # Write iterations_to_time
                     if current_iteration not in self._iterations_to_times:
-                        self._iterations_to_times[
-                            current_iteration
-                        ] = current_time
+                        self._iterations_to_times[current_iteration] = (
+                            current_time
+                        )
 
                     # Reset everything
                     current_iteration = line_data[0]
@@ -1174,13 +1174,13 @@ class OneGridFunctionH5(BaseOneGridFunction):
                     dataset, iteration, ref_level, component
                 )
                 data = np.transpose(dataset[()])
-
-                self.alldata[path][iteration][ref_level][
-                    component
-                ] = grid_data.UniformGridData(grid, data)
+                self.alldata[path][iteration][ref_level][component] = (
+                    grid_data.UniformGridData(grid, data)
+                )
         elapsed_time = datetime.now() - start_time
         # print("H5: _read_comp_as_uniform_grid_data elapsed time = {0}:{1}".format(elapsed_time.seconds, elapsed_time.microseconds))
         self._read_comp_time.append(elapsed_time)
+
         return self.alldata[path][iteration][ref_level][component]
 
     @staticmethod
@@ -1209,7 +1209,10 @@ class OneGridFunctionH5(BaseOneGridFunction):
             with h5py.File(path, "r") as file_:
                 parameters = file_["Parameters and Global Attributes"]
                 all_pars = (
-                    parameters["All Parameters"][()].decode().split("\n")
+                    parameters["All Parameters"][()]
+                    .tostring()
+                    .decode()
+                    .split("\n")
                 )
                 # We make sure that everything is lowercase, we are case insensitive
                 iohdf5_pars = [

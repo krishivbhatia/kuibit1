@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # Inspired by code originally developed by Wolfgang Kastaun. This file may
 # contain algorithms and/or structures first implemented in
@@ -433,6 +433,7 @@ def save(
     """
     if os.path.splitext(outputpath)[-1] == ".tikz":
         import tikzplotlib
+
         # If clean_figure is True, we extract from kwargs those argument
         # that tikzplotlib.clean_figure would take. For this, we need to
         # know what argument that function takes.

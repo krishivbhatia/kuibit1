@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2022-2023 Gabriele Bozzola
+# Copyright (C) 2022-2024 Gabriele Bozzola
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -394,9 +394,7 @@ class TestVector(unittest.TestCase):
         self.assertEqual(dot, expected)
 
     def test_norm(self):
-        self.assertEqual(
-            self.vec.norm(), (sum(t**2 for t in self.ts)).sqrt()
-        )
+        self.assertEqual(self.vec.norm(), (sum(t**2 for t in self.ts)).sqrt())
 
 
 class TestMatrix(unittest.TestCase):

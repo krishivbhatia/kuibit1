@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -40,9 +40,7 @@ class TestSensitivityCurves(unittest.TestCase):
 
         self.assertEqual(
             etb,
-            fs.FrequencySeries(
-                freqs, [4.8012536e-21**2, 6.5667816e-25**2]
-            ),
+            fs.FrequencySeries(freqs, [4.8012536e-21**2, 6.5667816e-25**2]),
         )
 
     def test_ETD(self):
@@ -52,9 +50,7 @@ class TestSensitivityCurves(unittest.TestCase):
 
         self.assertEqual(
             etd,
-            fs.FrequencySeries(
-                freqs, [3.4959517e-17**2, 5.7819941e-25**2]
-            ),
+            fs.FrequencySeries(freqs, [3.4959517e-17**2, 5.7819941e-25**2]),
         )
 
     def test_CE1(self):

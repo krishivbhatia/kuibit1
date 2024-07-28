@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2020-2023 Gabriele Bozzola
+# Copyright (C) 2020-2024 Gabriele Bozzola
 #
 # Inspired by code originally developed by Wolfgang Kastaun. This file may
 # contain algorithms and/or structures first implemented in
@@ -928,14 +928,10 @@ class GravitationalWavesOneDet(mp.MultipoleOneDet):
             )
 
             if direction == 0:
-                return (
-                    self.dist**2 / (8 * np.pi) * (Pp_int1 * Pp_int2).real()
-                )
+                return self.dist**2 / (8 * np.pi) * (Pp_int1 * Pp_int2).real()
 
             if direction == 1:
-                return (
-                    self.dist**2 / (8 * np.pi) * (Pp_int1 * Pp_int2).imag()
-                )
+                return self.dist**2 / (8 * np.pi) * (Pp_int1 * Pp_int2).imag()
 
         # This is direction == 2
 
@@ -1288,9 +1284,7 @@ class ElectromagneticWavesOneDet(mp.MultipoleOneDet):
                   time.
         :rtype: :py:class:`~TimeSeries`
         """
-        return (
-            self.dist**2 / (4 * np.pi) * np.abs(self[(mult_l, mult_m)]) ** 2
-        )
+        return self.dist**2 / (4 * np.pi) * np.abs(self[(mult_l, mult_m)]) ** 2
 
     def get_energy_lm(self, mult_l, mult_m):
         """Return the cumulative energy lost in the mode (l, m).
