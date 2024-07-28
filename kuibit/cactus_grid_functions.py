@@ -44,6 +44,7 @@ on the equatorial plane represented as :py:class:`~.HierarchicalGridData`.
 import os
 import re
 import warnings
+from datetime import datetime
 from abc import ABC, abstractmethod
 from bz2 import open as bopen
 from contextlib import contextmanager
@@ -936,6 +937,8 @@ class OneGridFunctionH5(BaseOneGridFunction):
     ([ ]rl=(\d+))?      # Refinement level
     ([ ]c=(\d+))?       # Component
     """
+    _read_comp_time = []
+    _parse_time = []
 
     def __init__(self, allfiles, var_name: str, dimension):
         """Constructor.
@@ -1002,6 +1005,7 @@ class OneGridFunctionH5(BaseOneGridFunction):
         """
         # This will give us an overview of what is available in the provided
         # file. We keep a collection of all these in the variable self.alldata
+        start_time = datetime.now()
         try:
             with h5py.File(path, "r") as f:
                 for group in f:
@@ -1060,6 +1064,10 @@ class OneGridFunctionH5(BaseOneGridFunction):
                     alldata_ref_level.setdefault(int(component), None)
         except RuntimeError as exce:
             raise RuntimeError(f"File {path} cannot be processed") from exce
+        
+        elapsed_time = datetime.now() - start_time
+        print("H5: _parse_file elapsed time = {0}:{1}".format(elapsed_time.seconds, elapsed_time.microseconds))
+        self._parse_time.append(elapsed_time)
 
     def _grid_from_dataset(self, dataset, iteration, ref_level, component):
         """Return a :py:class:`~.UniformGrid` from a given HDF5 dataset.
@@ -1157,7 +1165,7 @@ class OneGridFunctionH5(BaseOneGridFunction):
         :rtype: :py:class:`~.UniformGridData`
 
         """
-
+        start_time = datetime.now()
         if self.alldata[path][iteration][ref_level][component] is None:
             with self._get_dataset(
                 path, iteration, ref_level, component
@@ -1170,7 +1178,9 @@ class OneGridFunctionH5(BaseOneGridFunction):
                 self.alldata[path][iteration][ref_level][
                     component
                 ] = grid_data.UniformGridData(grid, data)
-
+        elapsed_time = datetime.now() - start_time
+        # print("H5: _read_comp_as_uniform_grid_data elapsed time = {0}:{1}".format(elapsed_time.seconds, elapsed_time.microseconds))
+        self._read_comp_time.append(elapsed_time)
         return self.alldata[path][iteration][ref_level][component]
 
     @staticmethod
@@ -1306,6 +1316,8 @@ class OneGridFunctionOpenPMD(BaseOneGridFunction):
     # This class implements the details on how to read the data for OpenPMD
     # files, most of the functionalities of the class are in
     # OneGridFunctionBase.
+    _read_comp_time = []
+    _parse_time = []
 
     def __init__(self, allfiles, var_name: str, dimension, mesh_basename: str):
         """Constructor.
@@ -1352,6 +1364,7 @@ class OneGridFunctionOpenPMD(BaseOneGridFunction):
         :type path: str
 
         """
+        start_time = datetime.now()
         rx_mesh = re.compile(self._pattern_mesh_name)
 
         with openpmd_series(path) as series:
@@ -1379,6 +1392,9 @@ class OneGridFunctionOpenPMD(BaseOneGridFunction):
                             # _read_component_as_uniform_grid_data upon request
                             alldata_ref_level.setdefault(component, None)
                             component += 1
+        elapsed_time = datetime.now() - start_time
+        # print("_parse_file elapsed time = {0}:{1}".format(elapsed_time.seconds, elapsed_time.microseconds))
+        self._parse_time.append(elapsed_time)
 
     def _read_component_as_uniform_grid_data(
         self, path: str, iteration: int, ref_level: int, component: int
@@ -1400,6 +1416,7 @@ class OneGridFunctionOpenPMD(BaseOneGridFunction):
         """
         # ref_level is an integer like 0, 1, 2, 3, 4, 5.
         # So it is formatted to 2 digits to give 00, 01, 04, 10, 11
+        start_time = datetime.now()
         mesh_name = f"{self.mesh_basename}_lev{ref_level:02d}"
 
         if self.alldata[path][iteration][ref_level][component] is None:
@@ -1428,6 +1445,9 @@ class OneGridFunctionOpenPMD(BaseOneGridFunction):
                 self.alldata[path][iteration][ref_level][component] = (
                     grid_data.UniformGridData(grid, data)
                 )
+        elapsed_time = datetime.now() - start_time
+        # print("_read_comp_as_uniform_grid_data elapsed time = {0}:{1}".format(elapsed_time.seconds, elapsed_time.microseconds))
+        self._read_comp_time.append(elapsed_time)
         return self.alldata[path][iteration][ref_level][component]
 
     def clear_cache(self):
